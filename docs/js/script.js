@@ -274,7 +274,7 @@ gPower.call(sliderPower);
 
 var globalData;
 // Get the data
-d3.json("/data/default-response-simple.json").then(function(defaultJson) {
+d3.json("cv_blog_hugo/data/default-response-simple.json").then(function(defaultJson) {
   globalData = defaultJson.data.meta;
   drawGraphBox(globalData);
   drawGraphEVSI(globalData, sliderPrev.value());
