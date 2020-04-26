@@ -42,15 +42,15 @@ $(function() {
   $("#metricToggle").change(function() {
     updateGraphBox(globalData);
     updateGraphEVSI(globalData, sliderPrev.value());
-    updateGraphNetEVSI(globalData, sliderPrev.value());
     updateGraphSample(globalData);
   });
 });
 
 // Set the dimensions of the canvas / graph
-var margin = { top: 30, right: 20, bottom: 30, left: 50 },
+var margin = { top: 30, right: 20, bottom: 50, left: 90 },
   width = 600 - margin.left - margin.right,
-  height = 270 - margin.top - margin.bottom;
+  boxChartWidth = 400 - margin.left - margin.right
+  height = 290 - margin.top - margin.bottom;
 var barWidth = 40;
 
 var boxPlotColor = "#898989";
@@ -62,7 +62,7 @@ var axisColor = "#898989";
 // Set the ranges
 var xBox = d3
   .scalePoint()
-  .rangeRound([0, width])
+  .rangeRound([0, boxChartWidth])
   .padding([0.5]);
 var yBox = d3
   .scaleLinear()
@@ -70,8 +70,6 @@ var yBox = d3
   .nice();
 var xEvsi = d3.scaleLinear().range([0, width]);
 var yEvsi = d3.scaleLinear().range([height, 0]);
-var xNet = d3.scaleLinear().range([0, width]);
-var yNet = d3.scaleLinear().range([height, 0]);
 var xSample = d3.scaleLinear().range([0, width]);
 var ySample = d3.scaleLinear().range([height, 0]);
 
@@ -80,9 +78,7 @@ var xAxisBox = d3.axisBottom(xBox);
 var yAxisBox = d3.axisLeft(yBox).ticks(6);
 
 var xAxisEvsi = d3.axisBottom(xEvsi).ticks(5);
-var yAxisEvsi = d3.axisLeft(yEvsi).ticks(5);
-var xAxisNet = d3.axisBottom(xNet).ticks(5);
-var yAxisNet = d3.axisLeft(yNet).ticks(5);
+var yAxisEvsi = d3.axisLeft(yEvsi).ticks(5, "s");
 var xAxisSample = d3.axisBottom(xSample).ticks(5);
 var yAxisSample = d3.axisLeft(ySample).ticks(5);
 
@@ -115,12 +111,12 @@ var valuelineSample = d3
 var svgBox = d3
   .select("#boxChartHolder")
   .append("svg")
-  .attr("width", width + margin.left + margin.right)
+  .attr("width", boxChartWidth + margin.left + margin.right)
   .attr("height", height + margin.top + margin.bottom)
   .append("g")
   .attr(
     "transform",
-    "translate(" + (margin.left - barWidth) + "," + margin.top + ")"
+    "translate(" + (margin.left - barWidth/2) + "," + margin.top + ")"
   );
 
 var boxTip = d3
@@ -133,7 +129,7 @@ var boxTip = d3
       "<span style='margin-left: 2.5px;'><b>" + d.key + "</b></span><br>";
     content +=
       `
-                    <table style="margin-top: 2.5px;">
+                    <table style="margin-top: 2.5px; background:none;">
                             <tr><td>Max: </td><td style="text-align: right">` +
       d3.format(".2f")(d.whiskers[0]) +
       `</td></tr>
@@ -228,13 +224,13 @@ var mouseGSample = svgSample.append("g").attr("class", "mouse-over-effects");
 
 var sliderPrev = d3
   .sliderBottom()
-  .min(0)
-  .max(1)
+  .min(0.05)
+  .max(1.0)
   .width(300)
   .tickFormat(d3.format(".2"))
   .ticks(5)
   .step(0.05)
-  .default(0.15)
+  .default(0.5)
   .on("onchange", val => {
     console.log(val);
     updateGraphEVSI(globalData, val);
@@ -245,8 +241,10 @@ var gPrev = d3
   .append("svg")
   .attr("width", 500)
   .attr("height", 100)
+  .attr("class", "sliderprevholder")
   .append("g")
-  .attr("transform", "translate(30,30)");
+  .attr("transform", "translate(30,30)")
+  .attr("class", "sliderprev");
 
 gPrev.call(sliderPrev);
 
@@ -258,7 +256,7 @@ var sliderPower = d3
   .tickFormat(d3.format(".2"))
   .ticks(5)
   .step(0.01)
-  .default(0.42)
+  .default(0.27)
   .on("onchange", val => {
     console.log(val);
     updatePowerLines(globalData, val);
@@ -276,17 +274,15 @@ gPower.call(sliderPower);
 
 var globalData;
 // Get the data
-d3.json("/data/default-response-net.json").then(function(defaultJson) {
+d3.json("/data/default-response-simple.json").then(function(defaultJson) {
   globalData = defaultJson.data.meta;
   drawGraphBox(globalData);
   drawGraphEVSI(globalData, sliderPrev.value());
-  drawGraphNetEVSI(globalData, sliderPrev.value());
   drawGraphSample(globalData);
   drawPowerLines(globalData, sliderPower.value());
 
   makeTipsSample(globalData);
   makeTipsEvsi(globalData);
-  makeTipsNet(globalData);
 });
 
 function xEvsiMax(data) {
@@ -496,12 +492,30 @@ function drawGraphBox(data) {
     .attr("class", "y axis box")
     .call(yAxisBox);
 
+  yAxisBoxContainer.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - 3*margin.left/4)
+      .attr("x",0 - (height / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .attr("class", "chart title text y axis label")
+      .text(getMetricPretty());
+
+
   // draw x axis
   xAxisBoxContainer
     .append("g")
     .attr("class", "x axis box")
     .attr("transform", "translate(0," + height + ")")
     .call(xAxisBox);
+
+  // draw title
+  svgBox.append("text")
+    .attr("x", boxChartWidth / 2 )
+    .attr("y", -margin.top/2)
+    .style("text-anchor", "middle")
+    .attr("class", "chart title text")
+    .text("Expected Outcomes in Each Treatment Arm")
 }
 
 function drawGraphEVSI(data, prev) {
@@ -522,6 +536,7 @@ function drawGraphEVSI(data, prev) {
       )
     )
     .attr("class", "lineEVSI")
+    .style("stroke-dasharray","5,5")
     .attr("d", valuelineEvsi);
 
   // Add the X Axis
@@ -531,17 +546,74 @@ function drawGraphEVSI(data, prev) {
     .attr("transform", "translate(0," + height + ")")
     .call(xAxisEvsi);
 
+  svgEVSI.append("text")
+      .attr("x",  width/2)
+      .attr("y", height+margin.top/2)
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .attr("class", "chart title text x axis label")
+      .text("Study Size");
+
   // Add the Y Axis
   svgEVSI
     .append("g")
     .attr("class", "y axis evsi")
     .call(yAxisEvsi);
 
+  svgEVSI.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - 3*margin.left/4)
+      .attr("x",0 - (height / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .attr("class", "chart title text y axis label evsi")
+      .text(getMetricPretty());
+
+    // draw title
+  svgEVSI.append("text")
+    .attr("x", width / 2 )
+    .attr("y", -margin.top/2)
+    .style("text-anchor", "middle")
+    .attr("class", "chart title text")
+    .text("Expected Value of Sample Information")
+
   svgEVSI
     .append("path")
     .datum(Object.entries(data["net_evsi"][getMetric()][prev]))
     .attr("class", "lineNetEVSI")
     .attr("d", valuelineNet);
+
+  var lines = ["EVSI", "EVSI after study costs", "Study size from power calculation"]
+  var ordinalDash = d3.scaleOrdinal()
+  .domain(lines)
+  .range([ "5,5", "0,0", "0,0"]);
+  var ordinalColor = d3.scaleOrdinal()
+  .domain(lines)
+  .range([ "#a51c30", "#a51c30", "#A9A9A9"]);
+var legend = svgEVSI.selectAll(".legend")
+      .data(lines)
+      .enter().append("g")
+      .attr("class", "legend")
+      .attr("transform", function(d, i) { return "translate(0," + (2*height/3+ (i * 20)) +  ")"; });
+
+  legend.append("line")
+      .attr("x1", width - 28)
+      .attr("x2", width)
+      .attr("y1", 10)
+      .attr("y2", 10)
+      .style("stroke-dasharray",ordinalDash)
+      .style("stroke-width", 2)
+      .style("stroke", ordinalColor);
+
+  legend.append("text")
+      .attr("x", width - 44)
+      .attr("y", 9)
+      .attr("dy", ".35em")
+      .attr("class", "chart title text")
+      .style("text-anchor", "end")
+      .text(function(d) { return d; });
+
+
 }
 
 function xNetMax(data) {
@@ -557,32 +629,7 @@ function yNetMax(data) {
     }
   );
 }
-function drawGraphNetEVSI(data, prev) {
-  prev = prev.toFixed(2);
-  // Scale the range of the data again
-  xNet.domain([0, xNetMax(data)]);
-  yNet.domain([0, yNetMax(data)]);
 
-  // Add the valueline path.
-
-  svgNet
-    .append("path")
-    .datum(Object.entries(data["net_evsi"][getMetric()][prev]))
-    .attr("class", "lineNetEVSI")
-    .attr("d", valuelineNet);
-  // Add the X Axis
-  svgNet
-    .append("g")
-    .attr("class", "x axis net")
-    .attr("transform", "translate(0," + height + ")")
-    .call(xAxisNet);
-
-  // Add the Y Axis
-  svgNet
-    .append("g")
-    .attr("class", "y axis net")
-    .call(yAxisNet);
-}
 
 function xSampleMax(data) {
   return d3.max(Object.keys(data["optimal_study"][getMetric()]), function(d) {
@@ -597,7 +644,7 @@ function ySampleMax(data) {
 function drawGraphSample(data) {
   console.log("here");
   // Scale the range of the data again
-  xSample.domain([0, xSampleMax(data)]);
+  xSample.domain([0, 1]);
   ySample.domain([0, ySampleMax(data)]);
 
   // Add the valueline path.
@@ -618,6 +665,63 @@ function drawGraphSample(data) {
     .append("g")
     .attr("class", "y axis sample")
     .call(yAxisSample);
+
+  svgSample.append("text")
+      .attr("x",  width/2)
+      .attr("y", height+margin.top/2)
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .attr("class", "chart title text x axis label")
+      .text("True Prevalence of Subpopulation");
+
+
+  svgSample.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - 3*margin.left/4)
+      .attr("x",0 - (height / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .attr("class", "chart title text y axis label evsi")
+      .text("Optimal Study Size");
+
+    // draw title
+  svgSample.append("text")
+    .attr("x", width / 2 )
+    .attr("y", -margin.top/2)
+    .style("text-anchor", "middle")
+    .attr("class", "chart title text")
+    .text("Optimal Study Size")
+
+  var lines = ["Study size from EVSI calculation", "Study size from power calculation"]
+  var ordinalDash = d3.scaleOrdinal()
+  .domain(lines)
+  .range([ "0,0", "0,0"]);
+  var ordinalColor = d3.scaleOrdinal()
+  .domain(lines)
+  .range([ "#a51c30", "#A9A9A9"]);
+var legend = svgSample.selectAll(".legend")
+      .data(lines)
+      .enter().append("g")
+      .attr("class", "legend")
+      .attr("transform", function(d, i) { return "translate(0," + (3*height/4+ (i * 20)) +  ")"; });
+
+  legend.append("line")
+      .attr("x1", width - 28)
+      .attr("x2", width)
+      .attr("y1", 10)
+      .attr("y2", 10)
+      .style("stroke-dasharray",ordinalDash)
+      .style("stroke-width", 2)
+      .style("stroke", ordinalColor);
+
+  legend.append("text")
+      .attr("x", width - 44)
+      .attr("y", 9)
+      .attr("dy", ".35em")
+      .attr("class", "chart title text")
+      .style("text-anchor", "end")
+      .text(function(d) { return d; });
+
 }
 
 function drawPowerLines(data, event_prob) {
@@ -834,6 +938,15 @@ function updateGraphBox(data) {
     .duration(750)
     .call(yAxisBox);
 
+  svgBoxMover.select(".y.axis.label")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - 3*margin.left/4)
+      .attr("x",0 - (height / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .attr("class", "chart title text y axis label")
+      .text(getMetricPretty());
+
   // draw x axis
   svgBoxMover
     .select(".x.axis.box") // change the x axis
@@ -874,6 +987,18 @@ function updateGraphEVSI(data, prev) {
     .duration(750)
     .call(yAxisEvsi);
 
+  // draw y axis
+
+
+  svgEVSI.select(".y.axis.label.evsi").duration(750)
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - 3*margin.left/4)
+      .attr("x",0 - (height / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .attr("class", "chart title text y axis label evsi")
+      .text(getMetricPretty());
+
   svgEVSI
     .select(".lineNetEVSI") // change the line
     .duration(750)
@@ -907,62 +1032,11 @@ function updateGraphEVSI(data, prev) {
   });
 }
 
-function updateGraphNetEVSI(data, prev) {
-  prev = prev.toFixed(2);
-
-  // Scale the range of the data again
-  xNet.domain([
-    0,
-    d3.max(Object.keys(data[getMetric()]), function(d) {
-      return Number(d);
-    })
-  ]);
-  yNet.domain([
-    0,
-    d3.max(Object.values(data["net_evsi"][getMetric()][prev]), function(d) {
-      return d;
-    })
-  ]);
-
-  // Select the section we want to apply our changes to
-  var svgNet = d3.select("body").transition();
-
-  // Make the changes
-  svgNet
-    .select(".lineNetEVSI") // change the line
-    .duration(750)
-    .attr(
-      "d",
-      valuelineNet(Object.entries(data["net_evsi"][getMetric()][prev]))
-    );
-  svgNet
-    .select(".x.axis.net") // change the x axis
-    .duration(750)
-    .call(xAxisNet);
-  svgNet
-    .select(".y.axis.net") // change the y axis
-    .duration(750)
-    .call(yAxisNet);
-  mouseGNet
-    .selectAll(".mouse-per-line")
-    .data([Object.entries(data["net_evsi"][getMetric()][prev])]);
-
-  mouseGNet.on("mousemove", function() {
-    var mouse = d3.mouse(this);
-    updateTooltipContentNet(
-      mouse,
-      Object.entries(data["net_evsi"][getMetric()][prev])
-    );
-  });
-}
-
 function updateGraphSample(data) {
   // Scale the range of the data again
   xSample.domain([
     0,
-    d3.max(Object.keys(data["optimal_study"][getMetric()]), function(d) {
-      return Number(d);
-    })
+    1
   ]);
   ySample.domain([
     0,
@@ -1011,6 +1085,14 @@ function getMetric() {
   }
 }
 
+function getMetricPretty() {
+  if (metricToggle.checked) {
+    return "Net Monetary Benefit (USD)";
+  } else {
+    return "QALYs";
+  }
+}
+
 function updateData() {
   var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
   var theUrl = "https://clinicalvoi.herokuapp.com/evsi";
@@ -1036,6 +1118,32 @@ function loopTask(taskId) {
   // trim quotes
   url = "https://clinicalvoi.herokuapp.com/tasks/" + taskId.slice(1, -2);
   console.log(url);
+  var newMin = Number(document.getElementsByName("prevalence.min")[0].value)
+  var newMax = Number(document.getElementsByName("prevalence.max")[0].value)
+  var ticks = Math.min((newMax-newMin)/0.05, 5)
+  console.log(ticks)
+  sliderPrev = d3
+  .sliderBottom()
+  .min(newMin)
+  .max(newMax)
+  .width(300)
+  .tickFormat(d3.format(".2"))
+  .ticks(ticks)
+  .step(0.05)
+  .on("onchange", val => {
+    console.log(val);
+    updateGraphEVSI(globalData, val);
+  });
+
+  d3
+  .select(".sliderprev").remove();
+
+  d3
+  .select(".sliderprevholder").append("g")
+  .attr("transform", "translate(30,30)")
+  .attr("class", "sliderprev").call(sliderPrev);
+
+
   var interval = setInterval(function() {
     d3.json(url, {
       method: "GET",
@@ -1045,7 +1153,6 @@ function loopTask(taskId) {
         globalData = data.data.meta;
         updateGraphBox(globalData);
         updateGraphEVSI(globalData, sliderPrev.value());
-        updateGraphNetEVSI(globalData, sliderPrev.value());
         updateGraphSample(globalData);
         updatePowerLines(globalData, sliderPower.value());
       }
