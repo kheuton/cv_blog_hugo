@@ -2,30 +2,30 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>robotics on Academia</title>
-    <link>https://academia-hugo.netlify.com/tags/robotics/</link>
+    <link>https://kheuton.github.io/cv_blog_hugo/tags/robotics/</link>
     <description>Recent content in robotics on Academia</description>
     <generator>Source Themes academia (https://sourcethemes.com/academic/)</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 27 Apr 2016 00:00:00 +0000</lastBuildDate>
     
-	    <atom:link href="https://academia-hugo.netlify.com/tags/robotics/index.xml" rel="self" type="application/rss+xml" />
+	    <atom:link href="https://kheuton.github.io/cv_blog_hugo/tags/robotics/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Artificial Intelligence</title>
-      <link>https://academia-hugo.netlify.com/project/artificial-intelligence/</link>
+      <link>https://kheuton.github.io/cv_blog_hugo/project/artificial-intelligence/</link>
       <pubDate>Wed, 27 Apr 2016 00:00:00 +0000</pubDate>
       
-      <guid>https://academia-hugo.netlify.com/project/artificial-intelligence/</guid>
+      <guid>https://kheuton.github.io/cv_blog_hugo/project/artificial-intelligence/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Robotics</title>
-      <link>https://academia-hugo.netlify.com/project/robotics/</link>
+      <link>https://kheuton.github.io/cv_blog_hugo/project/robotics/</link>
       <pubDate>Wed, 27 Apr 2016 00:00:00 +0000</pubDate>
       
-      <guid>https://academia-hugo.netlify.com/project/robotics/</guid>
+      <guid>https://kheuton.github.io/cv_blog_hugo/project/robotics/</guid>
       <description></description>
     </item>
     

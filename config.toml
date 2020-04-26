@@ -1,4 +1,4 @@
-baseURL = "kheuton.github.io/cv_blog_hugo/"
+baseURL = "https://kheuton.github.io/cv_blog_hugo/"
 languageCode = "en-us"
 title = "Value of information"
 theme = "academia-hugo"
