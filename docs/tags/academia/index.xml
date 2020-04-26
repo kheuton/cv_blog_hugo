@@ -417,12 +417,6 @@
         &lt;/tr&gt;
       &lt;/tbody&gt;
     &lt;/table&gt;
-    &lt;div&gt;
-      &lt;label for=&#34;metricToggle&#34;
-        &gt;Toggle results between Net Monetary Benefit (NMB) and Quality-Adjusted
-        Life Years (QALY):
-      &lt;/label&gt;
-    &lt;/div&gt;
 
     &lt;div id=&#34;answer&#34;&gt;&lt;/div&gt;
     &lt;!-- include the Glitch button to show what the webpage is about and

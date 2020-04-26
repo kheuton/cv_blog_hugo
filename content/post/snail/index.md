@@ -427,12 +427,6 @@ projects: []
         </tr>
       </tbody>
     </table>
-    <div>
-      <label for="metricToggle"
-        >Toggle results between Net Monetary Benefit (NMB) and Quality-Adjusted
-        Life Years (QALY):
-      </label>
-    </div>
 
     <div id="answer"></div>
     <!-- include the Glitch button to show what the webpage is about and
