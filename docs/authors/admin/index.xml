@@ -116,15 +116,15 @@ rm Untitled.md
     &lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1&#34; /&gt;
 
     &lt;!-- import the webpage&#39;s stylesheet --&gt;
-    &lt;link rel=&#34;stylesheet&#34; href=&#34;https://kheuton.github.io/cv_blog_hugo/css/style.css&#34; /&gt;
+    &lt;link rel=&#34;stylesheet&#34; href=&#34;https://kheuton.github.io/cv_blog_hugo/cv_blog_hugo/css/style.css&#34; /&gt;
 
     &lt;!-- import the webpage&#39;s javascript file --&gt;
     &lt;script src=&#34;https://d3js.org/d3.v5.js&#34;&gt;&lt;/script&gt;
     &lt;script src=&#34;https://unpkg.com/d3-simple-slider&#34;&gt;&lt;/script&gt;
-    &lt;script src=&#34;https://kheuton.github.io/cv_blog_hugo/js/box.js&#34; defer&gt;&lt;/script&gt;
-    &lt;script src=&#34;https://kheuton.github.io/cv_blog_hugo/js/d3-tip.js&#34; defer&gt;&lt;/script&gt;
-    &lt;script src=&#34;https://kheuton.github.io/cv_blog_hugo/js/d3-legend.js&#34;&gt;&lt;/script&gt;
-    &lt;script src=&#34;https://kheuton.github.io/cv_blog_hugo/js/script.js&#34; defer&gt;&lt;/script&gt;
+    &lt;script src=&#34;https://kheuton.github.io/cv_blog_hugo/cv_blog_hugo/js/box.js&#34; defer&gt;&lt;/script&gt;
+    &lt;script src=&#34;https://kheuton.github.io/cv_blog_hugo/cv_blog_hugo/js/d3-tip.js&#34; defer&gt;&lt;/script&gt;
+    &lt;script src=&#34;https://kheuton.github.io/cv_blog_hugo/cv_blog_hugo/js/d3-legend.js&#34;&gt;&lt;/script&gt;
+    &lt;script src=&#34;https://kheuton.github.io/cv_blog_hugo/cv_blog_hugo/js/script.js&#34; defer&gt;&lt;/script&gt;
   &lt;/head&gt;
   &lt;body&gt;
     &lt;form id=&#34;general_params&#34;&gt;

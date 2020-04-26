@@ -77,15 +77,15 @@ projects: []
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- import the webpage's stylesheet -->
-    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/cv_blog_hugo/css/style.css" />
 
     <!-- import the webpage's javascript file -->
     <script src="https://d3js.org/d3.v5.js"></script>
     <script src="https://unpkg.com/d3-simple-slider"></script>
-    <script src="/js/box.js" defer></script>
-    <script src="/js/d3-tip.js" defer></script>
-    <script src="/js/d3-legend.js"></script>
-    <script src="/js/script.js" defer></script>
+    <script src="/cv_blog_hugo/js/box.js" defer></script>
+    <script src="/cv_blog_hugo/js/d3-tip.js" defer></script>
+    <script src="/cv_blog_hugo/js/d3-legend.js"></script>
+    <script src="/cv_blog_hugo/js/script.js" defer></script>
   </head>
   <body>
     <form id="general_params">
